@@ -1,7 +1,7 @@
 package com.jmr.practica.ouath.oauth_practica.security;
 
-import com.formacionbdi.springboot.app.oauth.services.IUsuarioService;
-import com.formacionbdi.springboot.app.usuarios.commons.models.entity.Usuario;
+import com.jmr.practica.entities_practica.libreria_custom_users_practica.models.User;
+import com.jmr.practica.ouath.oauth_practica.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
@@ -16,16 +16,16 @@ import java.util.Map;
 public class InfoAdicionalToken implements TokenEnhancer{
 
 	@Autowired
-	private IUsuarioService usuarioService;
+	private IUserService userService;
 	
 	@Override
 	public OAuth2AccessToken enhance(OAuth2AccessToken accessToken, OAuth2Authentication authentication) {
-		Map<String, Object> info = new HashMap<String, Object>();
+		Map<String, Object> info = new HashMap<>();
 		
-		Usuario usuario = usuarioService.findByUsername(authentication.getName());
-		info.put("nombre", usuario.getNombre());
-		info.put("apellido", usuario.getApellido());
-		info.put("correo", usuario.getEmail());
+		User user = userService.findByUsername(authentication.getName());
+		info.put("First Name", user.getFirstName());
+		info.put("Last Name", user.getLastName());
+		info.put("Email", user.getEmail());
 		((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(info);
 		
 		return accessToken;
