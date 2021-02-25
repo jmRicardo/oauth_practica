@@ -4,7 +4,6 @@ import com.jmr.practica.entities_practica.libreria_custom_users_practica.models.
 import com.jmr.practica.ouath.oauth_practica.feign.UserFeignClient;
 import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,23 +18,26 @@ import java.util.stream.Collectors;
 @Service
 public class UserService implements IUserService, UserDetailsService {
 
-    @Autowired
-    UserFeignClient userFeignClient;
+    UserFeignClient client;
+
+    public UserService(UserFeignClient userFeignClient) {
+        this.client = userFeignClient;
+    }
 
     @Override
     public User findByUsername(String username) {
-        return userFeignClient.findByUsername(username);
+        return client.findByUsername(username);
     }
 
     @Override
     public User update(User user, Long id) {
-        return userFeignClient.update(user,id);
+        return client.update(user,id);
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         try{
-            User user = userFeignClient.findByUsername(username);
+            User user = client.findByUsername(username);
             
             List<GrantedAuthority> authorities = user.getRoles().stream()
                     .map(role -> new SimpleGrantedAuthority(role.getName()))

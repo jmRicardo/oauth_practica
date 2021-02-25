@@ -1,6 +1,7 @@
 package com.jmr.practica.ouath.oauth_practica.security;
 
 import com.jmr.practica.ouath.oauth_practica.security.event.AuthenticationSuccessErrorHandler;
+import com.jmr.practica.ouath.oauth_practica.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,7 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	@Autowired
-	private UserDetailsService userService;
+	private UserService userService;
 	
 	@Autowired
 	private AuthenticationSuccessErrorHandler eventPublisher;

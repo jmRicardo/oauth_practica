@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationEventPublisher;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -20,14 +21,16 @@ public class AuthenticationSuccessErrorHandler implements AuthenticationEventPub
 	@Override
 	public void publishAuthenticationSuccess(Authentication authentication) {
 
-		log.info("Success Login: " + authentication.getName());
+		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+		log.info("Success Login: " + userDetails.getUsername());
 		
-		User user = userService.findByUsername(authentication.getName());
+/*		User user = userService.findByUsername(userDetails.getUsername());
 		
 		if(user.getAttempts() != null && user.getAttempts() > 0) {
 			user.setAttempts(0);
 			userService.update(user, user.getId());
-		}
+		}*/
 	}
 
 	@Override
